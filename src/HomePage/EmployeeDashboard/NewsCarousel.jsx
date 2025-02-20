@@ -1,0 +1,86 @@
+import { useState, useEffect } from 'react'
+import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react'
+import axios from 'axios'
+ 
+// Sample news data
+ 
+ 
+export default function NewsCarousel() {
+  const [newsData,setNewsData]=useState(null);
+  const [currentIndex, setCurrentIndex] = useState(0)
+ 
+  useEffect(() => {
+    const fetchData = async () => {
+        const token=localStorage.getItem("token");
+        
+      try {
+        const response = await axios.get('http://localhost:8085/apis/employees/companyNews/getAllNews', {
+            headers: {
+              "Authorization": `Bearer ${token}`  // Add the token to the Authorization header
+            }});
+        console.log(response.data);
+        setNewsData(response.data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+ 
+    fetchData();
+  }, []);
+ 
+  const goToPrevious = () => {
+    setCurrentIndex((prevIndex) => prevIndex - 1)
+  }
+ 
+  const goToNext = () => {
+    setCurrentIndex((prevIndex) => prevIndex + 1)
+  }
+ 
+  let currentNews;
+  let isFirstNews;
+  let isLastNews;
+ 
+ 
+  if (newsData!==null){
+  currentNews = newsData[currentIndex]
+  isFirstNews = currentIndex === 0
+  isLastNews = currentIndex === newsData.length - 1
+  }
+ 
+ 
+ 
+ 
+  return (
+    <div className="flex flex-col items-center justify-center">
+        {newsData !== null && newsData.length > 0 && (
+  <div className="flex justify-between w-full max-w-2xl mt-4">
+    {!isFirstNews && (
+      <button
+        onClick={goToPrevious}
+        className="flex items-center px-4 py-2 text-black border border-solid border-black rounded-md transition-colors"
+      >
+        <ChevronLeftIcon className="h-5 w-5 mr-2" />
+      </button>
+    )}
+    <div className="flex-grow" /> {/* This div will take the remaining space */}
+    {!isLastNews && (
+      <button
+        onClick={goToNext}
+        className="flex items-center px-4 py-2 text-black border border-solid border-black rounded-md transition-colors"
+      >
+        <ChevronRightIcon className="h-5 w-5 ml-2" />
+      </button>
+    )}
+  </div>
+)}
+ 
+     {newsData!==null && newsData.length>0 &&<div className="bg-slate-100 p- mt-5 shadow-md rounded-lg w-full max-w-2xl overflow-hidden">
+        <div className="p-6 ">
+          {newsData.length>0 && <h2 className="text-2xl font-bold mb-2">{currentNews.newsHeading}</h2>}
+          {newsData.length>0 &&<p className="text-gray-600">{currentNews.news}</p>}
+        </div>
+      </div>}
+     
+    </div>
+  )
+}
