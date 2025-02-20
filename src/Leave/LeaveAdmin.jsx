@@ -50,7 +50,7 @@ export default function LeaveApprovalDashboard() {
       setLoading(true);
       try {
         const token = localStorage.getItem('token')
-        const response = await axios.get(`http://localhost:8085/api/leaves/manager/${managerId}`, {
+        const response = await axios.get(`https://middlewaretalentsbackend.azurewebsites.net/api/leaves/manager/${managerId}`, {
           method:'GET',
           headers:{
             'Authorization' : `Bearer ${token}`,
@@ -91,7 +91,7 @@ export default function LeaveApprovalDashboard() {
           'Content-Type' : 'application/json'
         },
       });
-      const response = await axios.get(`http://localhost:8085/api/leaves/manager/${managerId}`, {
+      const response = await axios.get(`https://middlewaretalentsbackend.azurewebsites.net/api/leaves/manager/${managerId}`, {
        
         headers:{
           'Authorization' : `Bearer ${token}`,
@@ -134,14 +134,14 @@ export default function LeaveApprovalDashboard() {
       // Encode the rejectionReason to ensure proper handling of special characters
     //const encodedReason = encodeURIComponent(rejectionReason);
     const token = localStorage.getItem('token')
-      await axios.put(`http://localhost:8085/api/leaves/reject/${selectedLeaveId}/${rejectionReason}`, null,  {
+      await axios.put(`https://middlewaretalentsbackend.azurewebsites.net/api/leaves/reject/${selectedLeaveId}/${rejectionReason}`, null,  {
        
         headers:{
           'Authorization' : `Bearer ${token}`,
           'Content-Type' : 'application/json'
         },
       });
-      const response = await axios.get(`http://localhost:8085/api/leaves/manager/${managerId}`, {
+      const response = await axios.get(`https://middlewaretalentsbackend.azurewebsites.net/api/leaves/manager/${managerId}`, {
        
         headers:{
           'Authorization' : `Bearer ${token}`,

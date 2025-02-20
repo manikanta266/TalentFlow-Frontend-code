@@ -27,7 +27,7 @@ const LeaveSheet = () => {
  const fetchLeaveSheet =  async () => {
   try{
     const token = localStorage.getItem('token')
-    const response = await axios.get("http://localhost:8085/api/getSheets", {
+    const response = await axios.get("https://middlewaretalentsbackend.azurewebsites.net/api/getSheets", {
         method:'GET',
         headers:{
           'Authorization' : `Bearer ${token}`,
@@ -59,7 +59,7 @@ const LeaveSheet = () => {
     try{
         const token = localStorage.getItem('token');
       if(isSubmitted && leaveId){
-        const response =  await axios.put(`http://localhost:8085/api/updateSheet/${leaveId}`, leaveData, {
+        const response =  await axios.put(`https://middlewaretalentsbackend.azurewebsites.net/api/updateSheet/${leaveId}`, leaveData, {
            
             headers:{
               'Authorization' : `Bearer ${token}`,

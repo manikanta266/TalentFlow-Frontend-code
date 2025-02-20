@@ -16,7 +16,7 @@ export default function ProfessionalInfoModal({
           const fetchEmployees = async () => {
               const token = localStorage.getItem('token');
               try {
-                  const response = await fetch('http://localhost:8085/api/v1/employeeManager/employees', {
+                  const response = await fetch('https://middlewaretalentsbackend.azurewebsites.net/api/v1/employeeManager/employees', {
                       method: 'GET',
                       headers: {
                           'Authorization': `Bearer ${token}`,

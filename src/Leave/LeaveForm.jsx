@@ -55,7 +55,7 @@ function LeaveRequestForm(props) {
             const token = localStorage.getItem('token')
            
             const [originResponse] = await Promise.all([
-                axios.get(`http://localhost:8085/api/v1/employeeManager/origin/${employeeId}`, {
+                axios.get(`https://middlewaretalentsbackend.azurewebsites.net/api/v1/employeeManager/origin/${employeeId}`, {
                     method: 'GET',
                     headers: {
                       'Authorization' : `Bearer ${token}`,
@@ -105,7 +105,7 @@ function LeaveRequestForm(props) {
             try {
                 const token = localStorage.getItem('token')
                 console.log(token)
-                const response = await axios.get('http://localhost:8085/api/leaves/remaining-leaves', {
+                const response = await axios.get('https://middlewaretalentsbackend.azurewebsites.net/api/leaves/remaining-leaves', {
                     method:'GET',
                     headers:{
                       'Authorization' : `Bearer ${token}`,
@@ -304,8 +304,8 @@ requiredFields.forEach(field => {
             const token = localStorage.getItem('token')
             console.log(formData);
             const url = isEditing
-                ? `http://localhost:8085/api/leaves/update/${formData.id}`
-                : `http://localhost:8085/api/leaves/submit`;
+                ? `https://middlewaretalentsbackend.azurewebsites.net/api/leaves/update/${formData.id}`
+                : `https://middlewaretalentsbackend.azurewebsites.net/api/leaves/submit`;
  
    
             let response;
@@ -372,7 +372,7 @@ requiredFields.forEach(field => {
         try {
             const token = localStorage.getItem('token')
             console.log(token)
-            const response = await axios.get('http://localhost:8085/api/leaves/remaining-leaves', {
+            const response = await axios.get('https://middlewaretalentsbackend.azurewebsites.net/api/leaves/remaining-leaves', {
                 method:'GET',
                 headers:{
                   'Authorization' : `Bearer ${token}`,
