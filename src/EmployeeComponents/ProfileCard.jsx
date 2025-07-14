@@ -342,7 +342,7 @@ const handleFileChange = async (e) => {
                            <img
                                 onClick={handleIconClick}
                                 className="h-full w-full object-cover rounded-full cursor-pointer"
-                                src={`${employee.profilePhoto}?t=${new Date().getTime()}`}
+                                src="https://img.freepik.com/premium-photo/profile-icon-white-background_941097-162179.jpg"
                                 alt="Employee profile"
                                 onError={(e) => { e.currentTarget.src = profileLogo; }}
                                 />
@@ -365,9 +365,9 @@ const handleFileChange = async (e) => {
                                             {!newImgSelected ? (
                                                 <div className="flex flex-col items-center">
                                                
-                                                    <img src={`${employee.profilePhoto}?t=${new Date().getTime()}`}
+                                                    <img src= "https://img.freepik.com/premium-photo/profile-icon-white-background_941097-162179.jpg"
                                                         alt="Current"
-                                                        className="w-48 h-48 rounded-full object-cover mb-4"
+                                                        className="h-20 w-20 object-cover rounded-full cursor-pointer"
                                                         onError={(e) => { e.currentTarget.src = profileLogo; }}
                                                     />
                                                    
@@ -449,7 +449,7 @@ const handleFileChange = async (e) => {
                                 />
                                 </div> */}
                                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-96 gap-y-10 ">
-                                <InfoItem icon={<UserCircleIcon />} label="Full name" value={`${employee.firstName || 'N/A'} ${employee.lastName || ''}`} />
+                                <InfoItem icon={<UserCircleIcon />} label="Full name" value={`${employee.lastName || 'N/A'} ${employee.lastName || ''}`} />
                                 {/* <InfoItem icon={<BuildingOfficeIcon />} label="Company Name" value={employee.companyName || "N/A"} highlight={true} /> */}
                                 <InfoItem icon={<IdentificationIcon />} label="Employee ID" value={employee.employeeId || "N/A"} />
                                 <InfoItem icon={<EnvelopeIcon />} label="Corporate Email" value={employee.corporateEmail || "N/A"} />

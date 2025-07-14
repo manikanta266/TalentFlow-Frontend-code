@@ -63,7 +63,7 @@ const EmpContactsDetails = () => {
     };
 
     const deleteContact = async () => {
-        await axios.delete(`https://msquirebackend.azurewebsites.net/apis/employees/contacts/contacts/${contactId}`,{
+        await axios.delete(`http://localhost:8081/apis/employees/contacts/contacts/${contactId}`,{
             headers: {
               "Authorization": `Bearer ${token}`,
               "X-Tenant-ID":localStorage.getItem('company')

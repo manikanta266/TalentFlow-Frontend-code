@@ -28,7 +28,8 @@ export default function Navbar() {
   
   const [employee, setEmployee] = useState(null);
   const [loading, setLoading]=useState(true);
-   const employeeId=localStorage.getItem("employeeId");
+  const employeeId=localStorage.getItem("employeeId");
+  console.log(employee);
   
 console.log(tenantId);
   useEffect(() => {

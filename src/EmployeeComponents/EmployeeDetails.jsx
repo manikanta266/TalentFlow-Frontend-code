@@ -148,7 +148,7 @@ export default function EmployeeDetails() {
                             <div className="flex h-80 w-80 items-center justify-center rounded-full">
                                 <img
                                     className="h-full w-full object-cover rounded-full"
-                                    src={employee.profilePhoto}
+                                    src="https://img.freepik.com/premium-photo/profile-icon-white-background_941097-162179.jpg"
                                     alt={employee.firstName ? `Profile photo of ${employee.firstName} not available` : 'Profile photo not available'}
                                 />
                                 </div>
