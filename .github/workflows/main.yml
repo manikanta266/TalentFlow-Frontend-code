@@ -1,86 +1,35 @@
-name: Build and Deploy React App to Azure Web Apps
+name: Deploy Frontend to S3
 
 on:
   push:
     branches:
       - main
-  workflow_dispatch:
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
-      - name: Set up Node.js
+      - name: Install Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18.x'
-          cache: 'npm'
-
-      - name: Cache node_modules
-        uses: actions/cache@v3
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
+          node-version: '18'
 
       - name: Install dependencies
-        run: npm ci
+        run: npm install
 
-      - name: Build the app
+      - name: Build project
         run: npm run build
-        env:
-          CI: false
 
-      - name: Verify Build Output
-        run: ls -la ./build
-
-      - name: Archive build artifacts (flattened)
-        run: |
-          cd build
-          zip -r ../release.zip ./*
-
-      - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v4
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
         with:
-          name: node-app
-          path: release.zip
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-north-1
 
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    environment:
-      name: 'Production'
-
-    steps:
-      - name: Download artifact from build job
-        uses: actions/download-artifact@v4
-        with:
-          name: node-app
-
-      - name: Extract artifact
-        run: unzip release.zip -d ./release
-
-      - name: Verify Extracted Files
-        run: ls -la ./release
-
-      - name: Deploy to Azure Web App
-        uses: azure/webapps-deploy@v3
-        with:
-          app-name: 'company-product-frontend'
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-          package: './release'
-
-      - name: Perform Health Check
-        run: |
-          sleep 10
-          curl -I https://company-product-frontend.azurewebsites.net || echo "Health check failed"
-
-      - name: Cleanup after deployment
-        run: rm -rf ./release release.zip
+      - name: Deploy to S3
+        run: aws s3 sync build/ s3://YOUR_BUCKET_NAME --delete
