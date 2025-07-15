@@ -6,3 +6,7 @@
 # Datasource local storage ignored files
 /dataSources/
 /dataSources.local.xml
+# Terraform-related files and folders
+terraform/.terraform/
+terraform/terraform.tfstate
+terraform/terraform.tfstate.backup
