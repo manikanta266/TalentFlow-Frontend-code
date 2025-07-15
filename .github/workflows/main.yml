@@ -72,8 +72,19 @@ jobs:
           fi
 
       # ✅ Deploy frontend code to S3
+      # - name: Deploy frontend code to S3
+      #   run: |
+      #     echo "Uploading to S3...."
+      #     aws s3 sync build/ "s3://${{ secrets.AWS_BUCKET_NAME }}" --delete --acl public-read
+      #     echo "Upload complete"
       - name: Deploy frontend code to S3
         run: |
           echo "Uploading to S3...."
-          aws s3 sync build/ "s3://${{ secrets.AWS_BUCKET_NAME }}" --delete --acl public-read
-          echo "Upload complete"
+          if aws s3 sync build/ "s3://${{ secrets.AWS_BUCKET_NAME }}" --delete --acl public-read; then
+            echo "✅ Upload with --delete successful"
+          else
+            echo "⚠️ Upload failed with --delete, retrying without it..."
+            aws s3 sync build/ "s3://${{ secrets.AWS_BUCKET_NAME }}" --acl public-read
+          fi
+          echo "🎉 Upload complete"
+
