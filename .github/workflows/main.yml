@@ -64,7 +64,5 @@ jobs:
           echo "Bucket already exists."
         fi
 
-    # ✅ Sync frontend build to S3
     - name: Deploy frontend code to S3
-      run: |
-        aws s3 sync build/ s3://${{ secrets.AWS_BUCKET_NAME }} --delete --acl public-read
+      run: aws s3 sync build/ s3://${{ secrets.AWS_BUCKET_NAME }} --delete --acl public-read
