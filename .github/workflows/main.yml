@@ -1,4 +1,4 @@
-name: Deploy Frontend to S3
+name: Deploy Frontend and Infrastructure
 
 on:
   push:
@@ -10,26 +10,50 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+    - name: Checkout source code
+      uses: actions/checkout@v3
 
-      - name: Install Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18
 
-      - name: Install dependencies
-        run: npm install
+    - name: Install frontend dependencies
+      run: npm install
 
-      - name: Build project
-        run: npm run build
+    - name: Build frontend project
+      run: npm run build
 
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: eu-north-1
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: eu-north-1
 
-      - name: Deploy to S3
-        run: aws s3 sync build/ s3://tf-demo-frontend-bucket-7545794a --delete
+    # ✅ Terraform Init & Apply
+    - name: Terraform Init & Apply
+      run: |
+        cd terraform
+        terraform init
+        terraform apply -auto-approve
+
+    # ✅ Create S3 bucket if it doesn't exist
+    - name: Create S3 bucket (if not exists)
+      run: |
+        BUCKET=${{ secrets.AWS_BUCKET_NAME }}
+        REGION=eu-north-1
+
+        if ! aws s3api head-bucket --bucket "$BUCKET" 2>/dev/null; then
+          echo "Bucket does not exist. Creating..."
+          aws s3api create-bucket \
+            --bucket "$BUCKET" \
+            --region "$REGION" \
+            --create-bucket-configuration LocationConstraint="$REGION"
+        else
+          echo "Bucket already exists."
+        fi
+
+    # ✅ Deploy build folder to S3
+    - name: Deploy frontend code to S3
+      run: aws s3 sync build/ s3://${{ secrets.AWS_BUCKET_NAME }} --delete --acl public-read
